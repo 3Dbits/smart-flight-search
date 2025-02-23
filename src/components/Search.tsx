@@ -65,7 +65,7 @@ function Search() {
             <NativeSelect.Root>
               <NativeSelect.Field
                 {...register("destination")}
-                defaultValue={"LAS"}
+                defaultValue={"LAX"}
               >
                 {airportsCollection.items.map(({ label, value }) => (
                   <option key={value} value={value}>

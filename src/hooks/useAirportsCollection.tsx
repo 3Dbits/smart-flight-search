@@ -1,6 +1,6 @@
 import { useMemo } from "react";
-import { airports } from "@nwpr/airport-codes";
 import { createListCollection } from "@chakra-ui/react/collection";
+import { airports } from "@/utils/CommonUtils";
 
 const useAirportsCollection = () => {
   const airportsCollection = useMemo(() => {

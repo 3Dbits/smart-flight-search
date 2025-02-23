@@ -6,13 +6,12 @@ import { Center } from "@chakra-ui/react/center";
 import { Flex } from "@chakra-ui/react/flex";
 import { Card } from "@chakra-ui/react/card";
 import { Heading, Text } from "@chakra-ui/react/typography";
-import { formatDate } from "@/utils/CommonUtils";
+import { airports, formatDate } from "@/utils/CommonUtils";
 import {
   createFlightPropsHash,
   FlightCardsProps,
   FlightDestination,
 } from "@/types/FlightSearch";
-import { airports } from "@nwpr/airport-codes";
 import { Box } from "@chakra-ui/react/box";
 import { Spacer } from "@chakra-ui/react";
 
