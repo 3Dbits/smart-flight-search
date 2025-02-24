@@ -19,10 +19,7 @@ export const flightSearchSchema = z.object({
     .string()
     .min(3, "Destination must be at least 3 characters")
     .max(3, "Destination must be exactly 3 characters")
-    .toUpperCase()
-    .refine((value) => value !== origin, {
-      message: "Origin and Destination cannot be the same",
-    }),
+    .toUpperCase(),
 
   departureDate: z
     .string()
@@ -34,18 +31,18 @@ export const flightSearchSchema = z.object({
     }, "Departure date must be today or in the future"),
 
   returnDate: z
-    .union([
-      z.string().length(0),
-      z
-        .string()
-        .regex(dateRegex, "Arrival date must be in YYYY-MM-DD format")
-        .refine((date) => {
-          const selectedDate = stripTime(new Date(date));
-          const today = stripTime(new Date());
-          return selectedDate >= today;
-        }, "Arrival date must be today or in the future"),
-    ])
-    .optional(),
+    .string()
+    .optional()
+    .refine(
+      (val) => !val || dateRegex.test(val),
+      "Arrival date must be in YYYY-MM-DD format"
+    )
+    .refine((val) => {
+      if (!val) return true;
+      const selectedDate = stripTime(new Date(val));
+      const today = stripTime(new Date());
+      return selectedDate >= today;
+    }, "Arrival date must be today or in the future"),
 
   adults: z
     .string()

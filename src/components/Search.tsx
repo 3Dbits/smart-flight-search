@@ -12,8 +12,8 @@ import {
   NumberInputLabel,
   NumberInputRoot,
 } from "./ui/number-input";
-import { flightSearchSchema } from "@/validators/flightSearchSchema";
 import FlightList from "./Flight/FlightList";
+import { flightSearchSchema } from "@/validators/flightSearchSchema";
 
 type Inputs = {
   origin: string;
