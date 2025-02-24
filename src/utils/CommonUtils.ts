@@ -13,6 +13,17 @@ export const getCurrentDay = () => {
   return new Date().toISOString().split("T")[0];
 };
 
+export const formatDuration = (duration: string): string => {
+  const match = duration.match(/PT(\d+)H(\d+)M/);
+
+  if (!match) {
+    throw new Error("Invalid duration format");
+  }
+
+  const [, hours, minutes] = match;
+  return `${parseInt(hours)}h ${parseInt(minutes)}min`;
+};
+
 export const stripTime = (date: Date) => {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate());
 };

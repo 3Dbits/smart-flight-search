@@ -2,9 +2,9 @@ export interface FlightSearchParams {
   origin: string;
   destination: string;
   departureDate: string;
-  arrivalDate?: string;
+  returnDate?: string;
   adults: number;
-  currency: string;
+  currencyCode: string;
 }
 
 export interface FlightResponse {
@@ -23,7 +23,7 @@ interface Itineraries {
   segments: Segments[];
 }
 
-interface Segments {
+export interface Segments {
   departure: Departure;
   arrival: Arrival;
   number: string;
@@ -35,17 +35,15 @@ interface Segments {
   blacklistedInEU: boolean;
 }
 
-interface Departure {
+export interface LocationInfo {
   iataCode: string;
   terminal: string;
   at: string;
 }
 
-interface Arrival {
-  iataCode: string;
-  terminal: string;
-  at: string;
-}
+type Departure = LocationInfo;
+
+type Arrival = LocationInfo;
 
 interface Aircraft {
   code: string;
@@ -64,9 +62,9 @@ export interface FlightCardsProps {
   origin: string;
   destination: string;
   departureDate: string;
-  arrivalDate?: string;
+  returnDate?: string;
   adults: number;
-  currency: string;
+  currencyCode: string;
 }
 
 export const createFlightPropsHash = (props: FlightCardsProps): string => {
@@ -74,9 +72,9 @@ export const createFlightPropsHash = (props: FlightCardsProps): string => {
     props.origin,
     props.destination,
     props.departureDate,
-    props.arrivalDate,
+    props.returnDate,
     props.adults.toString(),
-    props.currency,
+    props.currencyCode,
   ];
 
   const stringToHash = values.join("|:|");

@@ -1,6 +1,5 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useState } from "react";
-import FlightCards from "./FlightCards";
 import useAirportsCollection from "@/hooks/useAirportsCollection";
 import { getCurrentDay } from "@/utils/CommonUtils";
 import useCurrencyCollection from "@/hooks/useCurrencyCollection";
@@ -14,14 +13,15 @@ import {
   NumberInputRoot,
 } from "./ui/number-input";
 import { flightSearchSchema } from "@/validators/flightSearchSchema";
+import FlightList from "./Flight/FlightList";
 
 type Inputs = {
   origin: string;
   destination: string;
   departureDate: string;
-  arrivalDate?: string;
+  returnDate?: string;
   adults: number;
-  currency: string;
+  currencyCode: string;
 };
 
 function Search() {
@@ -33,6 +33,7 @@ function Search() {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<Inputs>({
     resolver: zodResolver(flightSearchSchema),
@@ -50,11 +51,13 @@ function Search() {
             <Field.Label>Origin</Field.Label>
             <NativeSelect.Root>
               <NativeSelect.Field {...register("origin")} defaultValue={"ZAG"}>
-                {airportsCollection.items.map(({ label, value }) => (
-                  <option key={value} value={value}>
-                    {label}
-                  </option>
-                ))}
+                {airportsCollection.items
+                  .filter((airport) => airport.value !== watch("destination"))
+                  .map(({ label, value }) => (
+                    <option key={value} value={value}>
+                      {label}
+                    </option>
+                  ))}
               </NativeSelect.Field>
               <NativeSelect.Indicator />
             </NativeSelect.Root>
@@ -67,11 +70,13 @@ function Search() {
                 {...register("destination")}
                 defaultValue={"LAX"}
               >
-                {airportsCollection.items.map(({ label, value }) => (
-                  <option key={value} value={value}>
-                    {label}
-                  </option>
-                ))}
+                {airportsCollection.items
+                  .filter((airport) => airport.value !== watch("origin"))
+                  .map(({ label, value }) => (
+                    <option key={value} value={value}>
+                      {label}
+                    </option>
+                  ))}
               </NativeSelect.Field>
               <NativeSelect.Indicator />
             </NativeSelect.Root>
@@ -87,15 +92,15 @@ function Search() {
             />
             <Field.ErrorText>{errors.departureDate?.message}</Field.ErrorText>
           </Field.Root>
-          <Field.Root invalid={!!errors.arrivalDate} width={"140px"}>
+          <Field.Root invalid={!!errors.returnDate} width={"140px"}>
             <Field.Label>Return Date</Field.Label>
             <Input
               type="date"
               width={"140px"}
               min={currentDay}
-              {...register("arrivalDate")}
+              {...register("returnDate")}
             />
-            <Field.ErrorText>{errors.arrivalDate?.message}</Field.ErrorText>
+            <Field.ErrorText>{errors.returnDate?.message}</Field.ErrorText>
           </Field.Root>
           <Field.Root invalid={!!errors.adults} width={"90px"}>
             <Field.Label>Adults</Field.Label>
@@ -105,11 +110,11 @@ function Search() {
             </NumberInputRoot>
             <Field.ErrorText>{errors.adults?.message}</Field.ErrorText>
           </Field.Root>
-          <Field.Root invalid={!!errors.currency} width={"90px"}>
+          <Field.Root invalid={!!errors.currencyCode} width={"90px"}>
             <Field.Label>Currency</Field.Label>
             <NativeSelect.Root>
               <NativeSelect.Field
-                {...register("currency")}
+                {...register("currencyCode")}
                 defaultValue={"EUR"}
               >
                 {currency.items.map(({ label, value }) => (
@@ -120,7 +125,7 @@ function Search() {
               </NativeSelect.Field>
               <NativeSelect.Indicator />
             </NativeSelect.Root>
-            <Field.ErrorText>{errors.currency?.message}</Field.ErrorText>
+            <Field.ErrorText>{errors.currencyCode?.message}</Field.ErrorText>
           </Field.Root>
           <Button type="submit" alignSelf={"end"}>
             Search
@@ -128,7 +133,7 @@ function Search() {
         </Center>
       </form>
 
-      {formData && <FlightCards {...formData} />}
+      {formData && <FlightList {...formData} />}
     </>
   );
 }
