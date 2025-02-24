@@ -14,14 +14,19 @@ export const getCurrentDay = () => {
 };
 
 export const formatDuration = (duration: string): string => {
-  const match = duration.match(/PT(\d+)H(\d+)M/);
+  const matchWithMinutes = duration.match(/PT(\d+)H(\d+)M/);
+  const matchHoursOnly = duration.match(/PT(\d+)H$/);
 
-  if (!match) {
-    throw new Error("Invalid duration format");
+  if (matchWithMinutes) {
+    const [, hours, minutes] = matchWithMinutes;
+    return `${parseInt(hours)}h ${parseInt(minutes)}min`;
+  } else if (matchHoursOnly) {
+    const [, hours] = matchHoursOnly;
+    return `${parseInt(hours)}h 0min`;
+  } else {
+    console.log(`Invalid duration format: ${duration}`);
+    return "";
   }
-
-  const [, hours, minutes] = match;
-  return `${parseInt(hours)}h ${parseInt(minutes)}min`;
 };
 
 export const stripTime = (date: Date) => {
