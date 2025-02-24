@@ -38,10 +38,7 @@ function Search() {
   } = useForm<Inputs>({
     resolver: zodResolver(flightSearchSchema),
   });
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    console.log(data);
-    setformData(data);
-  };
+  const onSubmit: SubmitHandler<Inputs> = (data) => setformData(data);
 
   return (
     <>
